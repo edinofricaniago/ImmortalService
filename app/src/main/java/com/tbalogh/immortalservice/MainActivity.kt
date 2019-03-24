@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity() {
         Intent(this, ImmortalService::class.java).also {
             startServiceAsForeground(it)
         }
-
     }
+
     private fun startServiceAsForeground(intent: Intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)

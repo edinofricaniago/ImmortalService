@@ -22,13 +22,17 @@ class ImmortalService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(notificationId, createNotification())
+        handleIntent(intent)
+        return START_STICKY
+    }
+
+    private fun handleIntent(intent: Intent?) {
         intent?.getIntExtra(DELAYED_CRASH_IN_SECONDS_KEY, -1)?.let {
             Log.d("tblog", "started with crash: {$it}")
             if (it > 0) {
                 handler.postDelayed({ throw RuntimeException("Oops") }, it.toLong() * 1000)
             }
         }
-        return START_STICKY
     }
 
     private fun createNotification(): Notification? {
