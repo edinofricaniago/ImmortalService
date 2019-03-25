@@ -20,6 +20,12 @@
         </activity>
         <!--TODO: exported=false to disable other app access the service. Not to disable until PendingIntent start works-->
         <service android:name=".ImmortalService"></service>
+        <receiver android:name=".StartImmortalServiceOnBootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
