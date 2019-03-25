@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+    <TextView
+            android:text="Select the launchMode to run the next activity!"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/textView2" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toTopOf="@+id/launchStandard"
+            android:textSize="18sp"/>
+
+    <Button
+            android:text="Launch standard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/launchStandard" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" app:layout_constraintBottom_toTopOf="@+id/launchSingleTop"/>
+    <Button
+            android:text="Launch SingleTop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/launchSingleTop"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/launchStandard"
+            app:layout_constraintBottom_toTopOf="@+id/launchSingleTask"/>
+    <Button
+            android:text="Launch singleinstance"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/launchSingleInstance"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/launchSingleTask"/>
+    <Button
+            android:text="Launch SingleTask"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/launchSingleTask"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/launchSingleTop"
+            app:layout_constraintBottom_toTopOf="@+id/launchSingleInstance"/>
+
+</android.support.constraint.ConstraintLayout>
