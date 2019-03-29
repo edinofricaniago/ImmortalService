@@ -1,17 +1,17 @@
 package com.tbalogh.immortalservice
 
 import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.os.Binder
-import android.os.Build
-import android.os.Handler
-import android.os.IBinder
+import android.os.*
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 
 const val DELAYED_CRASH_IN_SECONDS_KEY = "delayedCrashAfterSeconds"
+const val DELAYED_STOP_IN_SECONDS_KEY = "delayedStopAfterSeconds"
+const val ACTION_START_WITH_KEEP_ALIVE = "actionKeepAlive"
 
 class ImmortalService : Service() {
 
@@ -19,26 +19,57 @@ class ImmortalService : Service() {
     private val channelId = "ImmortalService"
     private val notificationId = 666
 
-    private val handler: Handler = Handler()
+    private val handler: Handler = Handler(Looper.getMainLooper())
     private var mediaPlayer: MediaPlayer? = null
 
+    private var alreadyStarted = false
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(logTag, "onStartCommand $intent - $this")
-        startForeground(notificationId, createNotification())
+        Log.d(logTag, "onStartCommand ${intent?.action} - $this")
+        if (!alreadyStarted) {
+            alreadyStarted = true
+            startForeground(notificationId, createNotification())
+            playWelcomeMusic()
+        }
         handleIntent(intent)
-        playWelcomeMusic()
         return START_STICKY
     }
 
+    override fun onDestroy() {
+        Log.d(logTag, "Good bye - $this")
+    }
+
+
     private fun handleIntent(intent: Intent?) {
         Log.d(logTag, "handleIntent $intent - $this")
+        when(intent?.action) {
+            ACTION_START_WITH_KEEP_ALIVE -> keepAlive()
+            else -> {}
+        }
         intent?.getIntExtra(DELAYED_CRASH_IN_SECONDS_KEY, -1)?.let {
-            Log.d(logTag, "started with crash: {$it} - $this")
             if (it > 0) {
+                Log.d(logTag, "started with crash: {$it} - $this")
                 handler.postDelayed({ throw RuntimeException("Oops") }, it.toLong() * 1000)
             }
         }
+        intent?.getIntExtra(DELAYED_STOP_IN_SECONDS_KEY, -1)?.let {
+            if (it > 0) {
+                handler.postDelayed({ this@ImmortalService.stopSelf() },it.toLong() * 1000)
+            }
+        }
+    }
+
+    private fun keepAlive() {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent: PendingIntent = Intent(applicationContext, ImmortalService::class.java).let { startImmortalServiceIntent ->
+            startImmortalServiceIntent.action = ACTION_START_WITH_KEEP_ALIVE
+            PendingIntent.getService(applicationContext, 0, startImmortalServiceIntent, 0)
+        }
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 10 * 1000,
+            alarmIntent
+        )
     }
 
     private fun createNotification(): Notification? {
@@ -83,7 +114,6 @@ class ImmortalService : Service() {
             mediaPlayer.isLooping = false
             mediaPlayer.start()
         }
-
     }
 
     class SomeBinder : Binder()

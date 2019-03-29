@@ -6,18 +6,68 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+    <Switch
+            android:text="Keep service alive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/keepAlive"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/startButton" android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"/>
     <Button
             android:text="Start service"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:id="@+id/startButton" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/startButton"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@+id/startWithCrash"/>
+            app:layout_constraintTop_toBottomOf="@+id/keepAlive"
+            app:layout_constraintBottom_toTopOf="@+id/startWithStop"/>
     <Button
-            android:text="Start service that crash in 5 seconds"
-            android:layout_width="0dp"
+            android:text="Start service that stops in (seconds)"
+            android:layout_width="300dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/startWithCrash" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/startButton"/>
+            android:id="@+id/startWithStop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startButton"
+            app:layout_constraintBottom_toTopOf="@+id/startWithCrash"/>
+    <Button
+            android:id="@+id/startWithCrash"
+            android:text="Start service that crashes in (seconds)"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startWithStop"
+            app:layout_constraintBottom_toTopOf="@+id/stopServiceButton"/>
+    <Button
+            android:text="Stop service"
+            android:layout_width="0dp"
+            android:layout_height="0dp" android:id="@+id/stopServiceButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startWithCrash"/>
+    <EditText
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/stopsSeconds"
+            android:text="5"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/startWithStop" android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/startButton"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/crashSeconds"/>
+    <EditText
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:gravity="center"
+            android:text="5"
+            android:id="@+id/crashSeconds" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toEndOf="@+id/startWithCrash"
+            android:layout_marginStart="8dp" android:layout_marginBottom="64dp"
+            app:layout_constraintBottom_toTopOf="@+id/stopServiceButton"/>
 </android.support.constraint.ConstraintLayout>

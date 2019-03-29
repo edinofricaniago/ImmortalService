@@ -23,8 +23,16 @@ class ImmortalApp : Application() {
         registerImmortalServiceMonitor()
 
         // This solution works however it should cooperate with crash-reporting libraries
-        registerRestartingExceptionHandler()
+//        registerRestartingExceptionHandler()
     }
+
+    private fun registerImmortalServiceMonitor() {
+        val filter = IntentFilter(Intent.ACTION_TIME_TICK)
+        val receiver = ImmortalServiceMonitor()
+        registerReceiver(receiver, filter)
+        Log.d(logTag, "ImmortalServiceMonitor registered!")
+    }
+
 
     private fun registerRestartingExceptionHandler() {
         val currentThreadHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -41,8 +49,8 @@ class ImmortalApp : Application() {
         override fun uncaughtException(t: Thread?, e: Throwable?) {
             Log.d(logTag, "Exception handled!")
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent: PendingIntent = Intent(context, ImmortalService::class.java).let { intent ->
-                PendingIntent.getBroadcast(context, 0, intent, 0)
+            val alarmIntent: PendingIntent = Intent(context.applicationContext, ImmortalService::class.java).let { intent ->
+                PendingIntent.getBroadcast(context.applicationContext, 0, intent, 0)
             }
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -59,12 +67,5 @@ class ImmortalApp : Application() {
             android.os.Process.killProcess(android.os.Process.myPid())
             // System.exit(0)
         }
-    }
-
-    private fun registerImmortalServiceMonitor() {
-        val filter = IntentFilter(Intent.ACTION_TIME_TICK)
-        val receiver = ImmortalServiceMonitor()
-        registerReceiver(receiver, filter)
-        Log.d(logTag, "ImmortalServiceMonitor registered!")
     }
 }

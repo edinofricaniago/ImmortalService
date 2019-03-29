@@ -8,7 +8,7 @@ import android.util.Log
 
 class StartImmortalServiceOnBootCompletedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+        if (intent.action == Intent.ACTION_LOCKED_BOOT_COMPLETED) {
             Log.d("MyBootCompletedReceiver", "boot completed received")
             startImmortalService(context)
         }
